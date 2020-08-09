@@ -48,6 +48,10 @@ body {
   font-size: 20px;
   margin-top: 12px;
 }
+.chat .chat-history ul {
+  list-style-type: none;
+  padding-inline-start: 0;
+}
 .chat .chat-history {
   padding: 30px 30px 20px;
   border-bottom: 2px solid white;
