@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="contents/font-awesome.min.css">
+  <link rel="stylesheet" href="contents/style.css">
+  <title>JS Async Example</title>
+</head>
+<body>
+<div class="container clearfix">
+  <div class="chat">
+    <div class="chat-header clearfix">
+      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
+      
+      <div class="chat-about">
+        <div class="chat-with">Chat with Lord Voldemort</div>
+        <div class="chat-num-messages">Harry Potter, the boy who lived, comes to die.</div>
+      </div>
+      <i class="fa fa-star"></i>
+    </div> <!-- end chat-header -->
+    
+    <div class="chat-history">
+      <ul>
+      </ul>
+      
+    </div> <!-- end chat-history -->
+    
+    <div class="chat-message clearfix">
+      <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
+      <button id="send-and-wait">Send And Wait</button>
+      <button id="send-async">Send Async</button>
+      <button id="clear-history">Clear</button>
+    </div> <!-- end chat-message -->
+    
+  </div> <!-- end chat -->
+  
+</div> <!-- end container -->
+
+<script id="message-template" type="text/x-handlebars-template">
+  <li class="clearfix">
+    <div class="message-data align-right">
+      <span class="message-data-time" >{{time}}, Today</span> &nbsp; &nbsp;
+      <span class="message-data-name" >Olia</span> <i class="fa fa-circle me"></i>
+    </div>
+    <div class="message other-message float-right">
+      {{response}}
+    </div>
+  </li>
+</script>
+
+<script id="message-response-template" type="text/x-handlebars-template">
+  <li>
+    <div class="message-data">
+      <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
+      <span class="message-data-time">{{time}}, Today</span>
+    </div>
+    <div class="message my-message">
+      {{response}}
+    </div>
+  </li>
+</script>
+
+<script id="error-response-template" type="text/x-handlebars-template">
+  <li>
+    <div class="message-data">
+      <span class="message-data-name"><i class="fa fa-circle offline"></i> Error</span>
+      <span class="message-data-time">{{time}}, Today</span>
+    </div>
+    <div class="message offline-message">
+      {{response}}
+    </div>
+  </li>
+</script>
+
+<script src="./scripts/jquery.min.js"></script>
+<script src="./scripts/handlebars.min.js"></script>
+<script src="./scripts/list.min.js"></script>
+<script src="./scripts/message-sender.js"></script>
+<script src="./scripts/app.js"></script>
+</body>
+</html>
