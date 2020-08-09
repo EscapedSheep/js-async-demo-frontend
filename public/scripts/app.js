@@ -1,4 +1,32 @@
 (function(){
+  function guessComplexity (message) {
+    if (message.includes('not easy')) { return 2; }
+    if (message.includes('easy')) { return 1; }
+    if (message.includes('complex')) { return 3; }
+    if (message.includes('difficult')) { return 4; }
+    if (message.includes('hardcore')) { return 5; }
+    if (message.includes('hell')) { return 6; }
+    return 0;
+  }
+
+  function sendMessageAndWait (message, success, failure) {
+    postRequestSync(
+      'http://localhost:3000/api/message', 
+      { text: message, complexity: guessComplexity(message) },
+      xhr => success(JSON.parse(xhr.responseText).text),
+      xhr => failure(xhr.statusText)
+    );
+  }
+  
+  function sendMessageAsync (message, success, failure) {
+    postRequestAsync(
+      'http://localhost:3000/api/message', 
+      { text: message, complexity: guessComplexity(message) },
+      xhr => success(JSON.parse(xhr.responseText).text),
+      xhr => failure(xhr.statusText)
+    );
+  }
+
   const chat = {
     messageToSend: '',
     messageResponses: [

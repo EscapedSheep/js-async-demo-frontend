@@ -1,7 +1,7 @@
-function sendMessageAndWait (message, success, failure) {
-  success('Response of ' + message);
+function postRequestSync (uri, payload, success, failure) {
+  success({ responseText: "{\"text\": \"How are you!\"}" });
 }
 
-function sendMessageAsync (message, success, failure) {
-  failure('Response of ' + message);
+function postRequestAsync (uri, payload, success, failure) {
+  success({ responseText: "{\"text\": \"How are you - From Async Version!\"}" });
 }
