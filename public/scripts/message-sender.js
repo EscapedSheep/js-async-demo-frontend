@@ -17,29 +17,26 @@ function postRequestAsync (uri, payload, success, failure) {
 }
 
 function post(uri, payload) {
-  return new Promise((resolve, reject) => {
-    // 1 create request
-    // 1.1 create XMLHttpRequest object
-    const xhr = new XMLHttpRequest();
-    // 1.2 set url, http method and sync/async configuration
-    xhr.open('POST', uri, true);
-    // 1.3 set request header
-    xhr.setRequestHeader('content-type', 'application/json');
-
-    // 2. register success & failure callbacks to request object.
-    // 2.1 register on `onload` callback.
-    xhr.onload = function () {
-      if (xhr.status >= 200 && xhr.status <= 299) {
-        resolve({ responseText: xhr.responseText, statusText: xhr.statusText });
+  const options = { 
+    method: 'POST',
+    body: JSON.stringify(payload), 
+    headers: { 'content-type': 'application/json' } 
+  };
+  return fetch(uri, options)
+    .then(response => {
+      if (response.status >= 200 && response.status <= 299) {
+        // Note: response.text() returns a Promise.
+        return response.text()
+          .then(responseText => ({responseText, statusText: response.statusText}));
       } else {
-        const error = new Error(xhr.responseText);
-        error.responseText = xhr.responseText;
-        error.statusText = xhr.statusText;
-        reject(error);
+        return response.text()
+          .then(responseText => {
+            // Note: if you want to reject. Just throw the error in the callback function.
+            const error = new Error(responseText);
+            error.responseText = responseText;
+            error.statusText = response.statusText;
+            throw error;
+          });
       }
-    }
-
-    // 3 send request with payload
-    xhr.send(JSON.stringify(payload));
-  });
+    });
 }
