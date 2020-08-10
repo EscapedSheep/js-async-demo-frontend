@@ -9,10 +9,18 @@
     return 0;
   }
 
+  function willReturnError (message) {
+    return message.includes('error');
+  }
+
+  function createPayload(message) {
+    return { text: message, complexity: guessComplexity(message), error: willReturnError(message) };
+  }
+
   function sendMessageAndWait (message, success, failure) {
     postRequestSync(
       'http://localhost:3000/api/message', 
-      { text: message, complexity: guessComplexity(message) },
+      createPayload(message),
       xhr => success(JSON.parse(xhr.responseText).text),
       xhr => failure(xhr.statusText)
     );
@@ -21,7 +29,7 @@
   function sendMessageAsync (message, success, failure) {
     postRequestAsync(
       'http://localhost:3000/api/message', 
-      { text: message, complexity: guessComplexity(message) },
+      createPayload(message),
       xhr => success(JSON.parse(xhr.responseText).text),
       xhr => failure(xhr.statusText)
     );
