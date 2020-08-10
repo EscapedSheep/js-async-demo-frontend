@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "http-server -p 4444"
+    "start": "http-server -p 4444"
   },
   "keywords": [],
   "author": "",
