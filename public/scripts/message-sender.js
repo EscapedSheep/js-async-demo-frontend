@@ -10,33 +10,30 @@ function postRequestSync () {
  * @param {(XMLHttpRequest) => void} success The success callback.
  * @param {(XMLHttpRequest) => void} failure The failure callback.
  */
-function postRequestAsync (uri, payload, success, failure) {
-  post(uri, payload)
-    .then(success)
-    .catch(failure);
+async function postRequestAsync (uri, payload, success, failure) {
+  try {
+    const response = await post(uri, payload);
+    success(response);
+  } catch (e) {
+    failure(e);
+  }
 }
 
-function post(uri, payload) {
+async function post(uri, payload) {
   const options = { 
     method: 'POST',
     body: JSON.stringify(payload), 
     headers: { 'content-type': 'application/json' } 
   };
-  return fetch(uri, options)
-    .then(response => {
-      if (response.status >= 200 && response.status <= 299) {
-        // Note: response.text() returns a Promise.
-        return response.text()
-          .then(responseText => ({responseText, statusText: response.statusText}));
-      } else {
-        return response.text()
-          .then(responseText => {
-            // Note: if you want to reject. Just throw the error in the callback function.
-            const error = new Error(responseText);
-            error.responseText = responseText;
-            error.statusText = response.statusText;
-            throw error;
-          });
-      }
-    });
+
+  const response = await fetch(uri, options);
+  if (response.status >= 200 && response.status <= 299) {
+    return { responseText: await response.text(), statusText: response.statusText };
+  } else {
+    const responseText = await response.text();
+    const error = new Error(responseText);
+    error.responseText = responseText;
+    error.statusText = response.statusText;
+    throw error;
+  }
 }
