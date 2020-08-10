@@ -17,12 +17,23 @@
     return { text: message, complexity: guessComplexity(message), error: willReturnError(message) };
   }
 
+  function extractResponseMessage (xhr) {
+    if (xhr.responseText) {
+      try {
+        return JSON.parse(xhr.responseText).text;
+      } catch (e) {
+        return xhr.statusText;
+      }
+    }
+    return xhr.statusText;
+  }
+
   function sendMessageAndWait (message, success, failure) {
     postRequestSync(
       'http://localhost:3000/api/message', 
       createPayload(message),
-      xhr => success(JSON.parse(xhr.responseText).text),
-      xhr => failure(xhr.statusText)
+      xhr => success(extractResponseMessage(xhr)),
+      xhr => failure(extractResponseMessage(xhr))
     );
   }
   
@@ -30,8 +41,8 @@
     postRequestAsync(
       'http://localhost:3000/api/message', 
       createPayload(message),
-      xhr => success(JSON.parse(xhr.responseText).text),
-      xhr => failure(xhr.statusText)
+      xhr => success(extractResponseMessage(xhr)),
+      xhr => failure(extractResponseMessage(xhr))
     );
   }
 
